@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardians of PEP - Performance Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ... (Your existing CSS styles remain unchanged here) ... */
+        :root {
+            --primary-teal: #20bd9d;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-light: #ffffff;
+            --text-dim: #b0bec5;
+            --reset-red: #d9534f;
+            --reset-red-hover: #c9302c;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            /* Deep Teal/Green Gradient */
+            background: radial-gradient(circle at top left, #1a2a3a, #0F2027);
+            background-attachment: fixed;
+            color: var(--text-light);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- HEADER & LOGO --- */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-img {
+            width: 180px;
+            height: auto;
+            /* CSS Magic for Blending */
+            filter: invert(1) contrast(1.2);
+            mix-blend-mode: screen; 
+            opacity: 0.9;
+            transition: transform 0.5s ease;
+        }
+
+        .logo-img:hover {
+            transform: scale(1.05);
+            opacity: 1;
+        }
+
+        /* Fallback icon if image is missing */
+        .fallback-logo {
+            font-size: 80px;
+            color: var(--primary-teal);
+            display: none; /* Hidden by default */
+            animation: fadeInUp 1s ease;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 0;
+            background: linear-gradient(to right, #fff, #20bd9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .header p {
+            color: var(--primary-teal);
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        /* --- CALCULATOR CARDS --- */
+        .container {
+            display: flex;
+            flex-wrap: wrap; /* Allows wrapping on mobile */
+            justify-content: center;
+            gap: 20px;
+            /* INCREASED WIDTH: Ensures 3 cards fit side-by-side */
+            width: 95%; 
+            max-width: 1600px;
+            margin: 0 auto;
+            padding-bottom: 80px;
+        }
+
+        .calculator {
+            /* FLEX BASIS ADJUSTED: Ensures they try to fit in one row */
+            flex: 1 1 300px; 
+            max-width: 400px; /* Keeps them from getting too wide */
+            min-width: 280px; /* Ensures they don't get too squished */
+            padding: 25px;
+            
+            /* Transparent / Glass Style */
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-top: 4px solid var(--primary-teal);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        /* Staggered Animation Delays */
+        .calculator:nth-child(1) { animation-delay: 0.2s; }
+        .calculator:nth-child(2) { animation-delay: 0.4s; }
+        .calculator:nth-child(3) { animation-delay: 0.6s; }
+
+        .calculator h2 {
+            text-align: center;
+            color: var(--primary-teal);
+            font-size: 1.4rem;
+            margin-top: 0;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* --- INPUT FIELDS (Vertical Stack) --- */
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            
+            background: rgba(0, 0, 0, 0.2); 
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus, input[type="text"]:focus {
+            outline: none;
+            background: rgba(0, 0, 0, 0.4);
+            border-color: var(--primary-teal);
+            box-shadow: 0 0 10px rgba(32, 189, 157, 0.2);
+        }
+        
+        /* Remove autofill background color in Chrome */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus {
+            -webkit-text-fill-color: white;
+            -webkit-box-shadow: 0 0 0px 1000px #15222e inset;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        /* --- BUTTONS --- */
+        /* New Container for Side-by-Side Buttons */
+        .button-group {
+            display: flex;
+            gap: 10px; /* Space between buttons */
+            margin-top: 5px; /* Adjust spacing above buttons */
+            margin-bottom: 5px; /* Adjust spacing below buttons */
+        }
+
+        /* Base Button Styling (now applies to both types) */
+        .button-group button {
+            flex: 1; /* Makes buttons take up equal space */
+            padding: 14px 10px; /* Adjusted padding */
+            font-size: 0.9rem; /* Slightly smaller font for two buttons */
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            /* Override the full width style for individual button */
+            width: auto; 
+        }
+
+        /* CALCULATE BUTTON - Use existing Teal/Green styling */
+        .button-group button[type="submit"], 
+        .button-group button:not([type="reset"]) {
+            color: #0F2027;
+            background: linear-gradient(90deg, #20bd9d, #a8ff78);
+            box-shadow: 0 5px 15px rgba(32, 189, 157, 0.4);
+        }
+
+        /* CLEAR/RESET BUTTON - Use contrasting Red styling */
+        .button-group button.clear-button { /* Use a class since type is now 'button' */
+            color: var(--text-light);
+            background: var(--reset-red);
+            box-shadow: 0 5px 15px rgba(217, 83, 79, 0.4);
+        }
+
+        .button-group button.clear-button:hover {
+            background: var(--reset-red-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(217, 83, 79, 0.6);
+        }
+
+        /* Apply hover/active to all buttons in the group */
+        .button-group button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(32, 189, 157, 0.6);
+            filter: brightness(1.1);
+        }
+        .button-group button:active {
+            transform: translateY(1px);
+        }
+        
+        /* --- RESULTS TABLE (Transparent) --- */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            margin-top: 20px;
+        }
+
+        td {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid transparent;
+        }
+
+        td:first-child {
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        td:last-child {
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            font-weight: bold;
+            text-align: right;
+            color: #fff;
+        }
+
+        /* Status Colors */
+        .status-met {
+            color: #a8ff78 !important; /* Bright Green */
+            text-shadow: 0 0 10px rgba(168, 255, 120, 0.4);
+        }
+        
+        .status-missed {
+            color: #ff6b6b !important; /* Soft Red */
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.4);
+        }
+
+        /* --- WATERMARK --- */
+        .watermark {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            padding: 8px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(32, 189, 157, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.5rem; }
+            .calculator { margin-bottom: 20px; }
+            .button-group { flex-direction: column; } /* Stack buttons vertically on small screens */
+            .button-group button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo-container">
+            <img src="guardians%20of%20pep.jpg" alt="Guardians Logo" class="logo-img" onerror="this.style.display='none'; document.querySelector('.fallback-logo').style.display='block';">
+            
+            <i class="fa-solid fa-shield-halved fallback-logo"></i>
+        </div>
+        <h1>Guardians of PEP</h1>
+        <p>Performance Tracking System</p>
+    </div>
+
+    <div class="container">
+        
+        <div class="calculator">
+            <h2><i class="fa-regular fa-star"></i> CSAT Score</h2>
+            <form onsubmit="event.preventDefault(); calculateCSAT();" id="csatForm">
+                <label>Satisfied Surveys (CSAT)</label>
+                <input type="number" id="csat" placeholder="0" required>
+                
+                <label>Dissatisfied Surveys (DSAT)</label>
+                <input type="number" id="dsat" placeholder="0" required>
+
+                <label>Total Surveys</label>
+                <input type="number" id="totalCSAT" readonly style="opacity: 0.7; cursor: default;">
+                
+                <div class="button-group">
+                    <button type="submit">Calculate</button>
+                    <button type="button" class="clear-button" onclick="clearCSATResults()">Clear All</button>
+                </div>
+            </form>
+
+            <table>
+                <tr>
+                    <td>Current Score</td>
+                    <td id="currentCSAT">0%</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td id="csatResult">-</td>
+                </tr>
+                <tr>
+                    <td>To Reach 92%</td>
+                    <td id="csatNeeded">-</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="calculator">
+            <h2><i class="fa-solid fa-stopwatch"></i> Rin1 HR</h2>
+            <form onsubmit="event.preventDefault(); calculateResolve();" id="resolveForm">
+                <label>Tickets (False)</label>
+                <input type="number" id="falseTickets" placeholder="0">
+                
+                <label>Tickets (True)</label>
+                <input type="number" id="trueTickets" placeholder="0">
+
+                <div class="button-group">
+                    <button type="button" onclick="calculateResolve()">Calculate</button> 
+                    <button type="button" class="clear-button" onclick="clearResolveResults()">Clear All</button>
+                </div>
+            </form>
+
+            <table>
+                <tr>
+                    <td>Rin1 HR %</td>
+                    <td id="resolveResult">0%</td>
+                </tr>
+                <tr>
+                    <td>To Reach 88%</td>
+                    <td id="ticketsNeeded">-</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="calculator">
+            <h2><i class="fa-solid fa-pen-to-square"></i> Case Logging</h2>
+            <form onsubmit="event.preventDefault(); calculateCaseLogging();" id="caseLoggingForm">
+                <label>Total Interactions</label>
+                <input type="number" id="interactions" placeholder="0">
+                
+                <label>Cases Logged</label>
+                <input type="number" id="cases" placeholder="0">
+                
+                <div class="button-group">
+                    <button type="button" onclick="calculateCaseLogging()">Calculate</button>
+                    <button type="button" class="clear-button" onclick="clearCaseLoggingResults()">Clear All</button>
+                </div>
+            </form>
+
+            <table>
+                <tr>
+                    <td>Current %</td>
+                    <td id="currentCaseLoggingPercentage">0%</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td id="caseLoginResult">-</td>
+                </tr>
+                <tr>
+                    <td>To Reach 85%</td>
+                    <td id="additionalCases">-</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="watermark">
+        Hilton Links Powered By Nisaar
+    </div>
+
+    <script>
+        // --- CSAT LOGIC ---
+        // Helper function for inputs (only updates total surveys)
+        function updateCSAT() {
+            let csat = parseInt(document.getElementById('csat').value) || 0;
+            let dsat = parseInt(document.getElementById('dsat').value) || 0;
+            document.getElementById('totalCSAT').value = csat + dsat;
+        }
+
+        function calculateCSAT() {
+            let csat = parseInt(document.getElementById('csat').value) || 0;
+            let dsat = parseInt(document.getElementById('dsat').value) || 0;
+            let total = csat + dsat;
+            
+            updateCSAT(); 
+            
+            if(total === 0) return;
+
+            let currentPercent = (csat / total) * 100;
+            let targetPercent = 92;
+            let needed = 0;
+
+            if (currentPercent < targetPercent) {
+                needed = Math.ceil((targetPercent * total - 100 * csat) / (100 - targetPercent));
+                if(needed < 0) needed = 0; 
+            }
+
+            document.getElementById('currentCSAT').innerText = currentPercent.toFixed(2) + '%';
+            
+            let resultEl = document.getElementById('csatResult');
+            if (currentPercent >= targetPercent) {
+                resultEl.innerHTML = '<i class="fa-solid fa-check"></i> On Track';
+                // Remove previous class and add new one
+                resultEl.className = "status-met";
+            } else {
+                resultEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Off Track';
+                // Remove previous class and add new one
+                resultEl.className = "status-missed";
+            }
+
+            document.getElementById('csatNeeded').innerText = needed > 0 ? `+${needed} CSATs` : "Goal Met";
+        }
+        
+        // --- NEW CSAT CLEAR FUNCTION ---
+        function clearCSATResults() {
+            // 1. Reset the form inputs
+            document.getElementById('csatForm').reset();
+            
+            // 2. Clear the calculated results section
+            document.getElementById('currentCSAT').innerText = '0%';
+            
+            const resultEl = document.getElementById('csatResult');
+            resultEl.innerText = '-';
+            resultEl.className = ''; // Remove status-met or status-missed class
+            
+            document.getElementById('csatNeeded').innerText = '-';
+        }
+
+        // --- Rin1 HR LOGIC ---
+        function calculateResolve() {
+            let falseTickets = parseInt(document.getElementById('falseTickets').value) || 0;
+            let trueTickets = parseInt(document.getElementById('trueTickets').value) || 0;
+            let total = falseTickets + trueTickets;
+
+            if (total === 0) return;
+
+            let percent = (falseTickets / total) * 100;
+            let target = 88;
+            
+            document.getElementById('resolveResult').innerText = percent.toFixed(2) + '%';
+
+            let resultEl = document.getElementById('resolveResult'); 
+            if (percent >= target) {
+                resultEl.className = "status-met";
+            } else {
+                resultEl.className = "status-missed";
+            }
+
+            let needed = Math.ceil(((target * total) - (100 * falseTickets)) / (100 - target));
+            if (needed < 0) needed = 0;
+
+            document.getElementById('ticketsNeeded').innerText = needed > 0 ? `+${needed} Tickets` : "Goal Met";
+        }
+
+        // --- NEW RIN1 HR CLEAR FUNCTION ---
+        function clearResolveResults() {
+            // 1. Reset the form inputs
+            document.getElementById('resolveForm').reset();
+            
+            // 2. Clear the calculated results section
+            const resultEl = document.getElementById('resolveResult');
+            resultEl.innerText = '0%';
+            resultEl.className = ''; // Remove status-met or status-missed class
+            
+            document.getElementById('ticketsNeeded').innerText = '-';
+        }
+
+
+        // --- Case Logging LOGIC ---
+        function calculateCaseLogging() {
+            let interactions = parseFloat(document.getElementById("interactions").value) || 0;
+            let cases = parseFloat(document.getElementById("cases").value) || 0;
+
+            if (interactions > 0) {
+                let percent = (cases / interactions) * 100;
+                let target = 85;
+                
+                document.getElementById("currentCaseLoggingPercentage").innerText = percent.toFixed(2) + '%';
+
+                let resultEl = document.getElementById('caseLoginResult');
+                if (percent >= target) {
+                    resultEl.innerHTML = '<i class="fa-solid fa-check"></i> Met';
+                    resultEl.className = "status-met";
+                } else {
+                    resultEl.innerHTML = '<i class="fa-solid fa-xmark"></i> Missed';
+                    resultEl.className = "status-missed";
+                }
+
+                let required = Math.ceil(0.85 * interactions);
+                let needed = required - cases;
+                
+                document.getElementById("additionalCases").innerText = needed > 0 ? `+${needed} Cases` : "Goal Met";
+            }
+        }
+        
+        // --- NEW CASE LOGGING CLEAR FUNCTION ---
+        function clearCaseLoggingResults() {
+            // 1. Reset the form inputs
+            document.getElementById('caseLoggingForm').reset();
+
+            // 2. Clear the calculated results section
+            document.getElementById("currentCaseLoggingPercentage").innerText = '0%';
+
+            const resultEl = document.getElementById('caseLoginResult');
+            resultEl.innerText = '-';
+            resultEl.className = ''; // Remove status-met or status-missed class
+            
+            document.getElementById("additionalCases").innerText = '-';
+        }
+    </script>
+</body>
+</html>
